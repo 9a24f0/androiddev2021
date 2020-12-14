@@ -4,10 +4,13 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 
 public class WeatherActivity extends AppCompatActivity {
+
+    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,10 +19,12 @@ public class WeatherActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ForecastFragment firstFragment = new ForecastFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.activity_weather, firstFragment, null)
-                .commit();
+        ForecastFragment forecast_fragment = new ForecastFragment();
+        WeatherFragment weather_fragment = new WeatherFragment();
+
+        ft.add(R.id.activity_weather, weather_fragment, null);
+        ft.add(R.id.activity_weather, forecast_fragment, null);
+        ft.commit();
     }
 
     public WeatherActivity() {
