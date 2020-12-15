@@ -26,4 +26,6 @@
     <string name="showers">Showers</string>
     <string name="rain">Rain</string>
     <string name="scattered_thunderstorms">Scattered Thunderstorms</string>
+    <string name="hanoi">Hanoi</string>
+    <string name="cloudy">12C\nCloudy</string>
 </resources>

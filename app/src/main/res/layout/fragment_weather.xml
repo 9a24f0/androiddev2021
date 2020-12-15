@@ -19,7 +19,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:textSize="20sp"
-            android:text="12C\nCloudy" />
+            android:text="@string/cloudy" />
 
         <ImageView
             android:id="@+id/image"
@@ -35,7 +35,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:textSize="20sp"
-            android:text="Hanoi"/>
+            android:text="@string/hanoi"/>
     </RelativeLayout>
 
 </LinearLayout>

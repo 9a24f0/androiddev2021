@@ -26,4 +26,6 @@
     <string name="showers">Mưa rào</string>
     <string name="rain">Có mưa</string>
     <string name="scattered_thunderstorms">Giông bão</string>
+    <string name="hanoi">Hà Nội</string>
+    <string name="cloudy">12C\nCó mây</string>
 </resources>
