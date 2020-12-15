@@ -16,17 +16,19 @@
         app:titleTextColor="@color/white"
         app:popupTheme="@style/Theme.USTHWeather.PopupOverlay" />
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/pager_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:paddingBottom="4dp"
+        android:paddingTop="4dp" />
+
     <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/pager">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/pager_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:paddingBottom="4dp"
-            android:paddingTop="4dp" />
+
     </androidx.viewpager.widget.ViewPager>
 </LinearLayout>
