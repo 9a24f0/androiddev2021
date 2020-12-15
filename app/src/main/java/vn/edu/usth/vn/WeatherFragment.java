@@ -14,7 +14,7 @@ public class WeatherFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_weather, container, false);
-        view.setBackgroundResource(R.color.topPanel);
+        view.setBackgroundResource(R.drawable.frame);
         return view;
     }
 }
