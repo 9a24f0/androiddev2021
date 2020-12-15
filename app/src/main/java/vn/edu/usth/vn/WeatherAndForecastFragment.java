@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -22,8 +20,10 @@ public class WeatherAndForecastFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+
         WeatherFragment weatherFragment = new WeatherFragment();
         ForecastFragment forecastFragment = new ForecastFragment();
+
         ft.add(R.id.page_fragment, weatherFragment, null);
         ft.add(R.id.page_fragment, forecastFragment, null);
         ft.commit();

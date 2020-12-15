@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
     private final int PAGE_COUNT = 3;
-//    private String titles[] = new String[] { "Hanoi", "Paris", "Toulouse" };
+    private String titles[] = new String[] { "Hanoi", "Paris", "Toulouse" };
     public HomeFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -26,9 +26,9 @@ public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
         return new WeatherAndForecastFragment();
     }
 
-//    @Override
-//    public CharSequence getPageTitle(int page) {
-//        // returns a tab title corresponding to the specified page
-//        return titles[page];
-//    }
+    @Override
+    public CharSequence getPageTitle(int page) {
+        // returns a tab title corresponding to the specified page
+        return titles[page];
+    }
 }
