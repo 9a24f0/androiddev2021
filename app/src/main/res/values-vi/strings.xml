@@ -12,18 +12,18 @@
     <string name="title_activity_weather">WeatherActivity</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="mon">Mon</string>
-    <string name="tue">Tue</string>
-    <string name="wed">Wed</string>
-    <string name="thu">Thu</string>
-    <string name="fri">Fri</string>
-    <string name="sat">Sat</string>
-    <string name="sun">Sun</string>
-    <string name="thunderstorms">Thunderstorms</string>
-    <string name="mostly_cloudy">Mostly Cloudy</string>
-    <string name="scattered_showers">Scattered Showers</string>
-    <string name="partly_cloudy">Partly Cloudy</string>
-    <string name="showers">Showers</string>
-    <string name="rain">Rain</string>
-    <string name="scattered_thunderstorms">Scattered Thunderstorms</string>
+    <string name="mon">Thứ Hai</string>
+    <string name="tue">Thứ Ba</string>
+    <string name="wed">Thứ Tư</string>
+    <string name="thu">Thứ Năm</string>
+    <string name="fri">Thứ Sáu</string>
+    <string name="sat">Thứ Bảy</string>
+    <string name="sun">Chủ Nhật</string>
+    <string name="thunderstorms">Bão</string>
+    <string name="mostly_cloudy">Nhiều mây</string>
+    <string name="scattered_showers">Mưa phùn</string>
+    <string name="partly_cloudy">Ít mây</string>
+    <string name="showers">Mưa rào</string>
+    <string name="rain">Có mưa</string>
+    <string name="scattered_thunderstorms">Giông bão</string>
 </resources>

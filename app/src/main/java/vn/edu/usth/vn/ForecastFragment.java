@@ -14,7 +14,7 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(@org.jetbrains.annotations.NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_forecast, container, false);
-        view.setBackgroundColor(0x200000ff);
+        view.setBackgroundResource(R.color.botPanel);
         return view;
     }
 }
