@@ -16,4 +16,10 @@
         app:titleTextColor="@color/white"
         app:popupTheme="@style/Theme.USTHWeather.PopupOverlay" />
 
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/pager">
+        <include layout="@layout/fragment_weather_and_forecast"/>
+    </androidx.viewpager.widget.ViewPager>
 </LinearLayout>

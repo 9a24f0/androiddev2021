@@ -1,12 +1,13 @@
 package vn.edu.usth.vn;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.util.Log;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 public class WeatherActivity extends AppCompatActivity {
 
@@ -19,12 +20,11 @@ public class WeatherActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ForecastFragment forecast_fragment = new ForecastFragment();
-        WeatherFragment weather_fragment = new WeatherFragment();
+        PagerAdapter adapter = new HomeFragmentPagerAdapter(getSupportFragmentManager());
 
-        ft.add(R.id.activity_weather, weather_fragment, null);
-        ft.add(R.id.activity_weather, forecast_fragment, null);
-        ft.commit();
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setOffscreenPageLimit(3);
+        viewPager.setAdapter(adapter);
     }
 
     public WeatherActivity() {
