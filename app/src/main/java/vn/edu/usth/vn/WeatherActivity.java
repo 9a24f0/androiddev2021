@@ -1,9 +1,12 @@
 package vn.edu.usth.vn;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +41,7 @@ public class WeatherActivity extends AppCompatActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(adapter);
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.pager_header);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -83,6 +87,29 @@ public class WeatherActivity extends AppCompatActivity {
         Log.i("WeatherActivity", "Resuming");
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh:
+                Toast.makeText(getApplicationContext(), "Refreshing", Toast.LENGTH_LONG).show();
+                break;
+            case R.id.action_settings:
+                Intent pref = new Intent(this, PrefActivity.class);
+                startActivity(pref);
+                break;
+            default:
+                super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
     private void copyFileToExternalStorage(int resourceId, String resourceName) {
         try {
             File file = new File(getExternalFilesDir(null), resourceName);
@@ -96,8 +123,6 @@ public class WeatherActivity extends AppCompatActivity {
                 }
             }
             finally {
-                Toast toast = Toast.makeText(getApplicationContext(), file.getAbsolutePath(), Toast.LENGTH_LONG);
-                toast.show();
                 in.close();
                 out.close();
             }

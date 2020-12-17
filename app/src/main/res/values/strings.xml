@@ -28,4 +28,6 @@
     <string name="scattered_thunderstorms">Scattered Thunderstorms</string>
     <string name="hanoi">Hanoi</string>
     <string name="cloudy">12C\nCloudy</string>
+    <string name="title_activity_pref">PrefActivity</string>
+    <string name="action_refresh">Refresh</string>
 </resources>
