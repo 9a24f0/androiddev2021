@@ -23,6 +23,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
@@ -108,57 +112,23 @@ public class WeatherActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh:
-                @SuppressLint("StaticFieldLeak") AsyncTask<String, Integer, Bitmap> task = new AsyncTask<String, Integer, Bitmap>() {
+                // once, should be performed once per app instance
+                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+                // a listener (kinda similar to onPostExecute())
+                Response.Listener<Bitmap> listener = new Response.Listener<Bitmap>() {
                     @Override
-                    protected void onPreExecute() {
-                        // do some preparation here, if needed
-                    }
-
-                    @Override
-                    protected Bitmap doInBackground(String... params) {
-                        Bitmap bitmap = null;
-                        // This is where the worker thread's code is executed
-                        // params are passed from the execute() method call
-                        try {
-
-                            // initialize URL
-                            URL url = new URL(params[0]);
-                            // Make a request to server
-                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                            connection.setRequestMethod("GET");
-                            connection.setDoInput(true);
-                            // allow reading response code and response data connection.
-                            connection.connect();
-                            // Receive response
-                            int response = connection.getResponseCode();
-                            Log.i("USTHWeather", "The response is: " + response);
-                            InputStream is = connection.getInputStream();
-                            // Process image response
-                            bitmap = BitmapFactory.decodeStream(is);
-                            connection.disconnect();
-                        }
-                        catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return bitmap;
-                    }
-                    @Override
-                    protected void onProgressUpdate(Integer... values) {
-                        // This method is called in the main thread, so it's possible
-                        // to update UI to reflect the worker thread progress here.
-                        // In a network access task, this should update a progress bar
-                        // to reflect how many percent of data has been retrieved
-                    }
-                    @Override
-                    protected void onPostExecute(Bitmap bitmap) {
-                        // This method is called in the main thread. After #doInBackground returns
-                        // the String data, we simply set it to an ImageView using ImageView.setImageBitmap()
-                        Toast.makeText(getApplicationContext(), "refreshing", Toast.LENGTH_SHORT).show();
-                        ImageView logo = findViewById(R.id.logo);
-                        logo.setImageBitmap(bitmap);
+                    public void onResponse(Bitmap response) {
+                        ImageView iv = (ImageView) findViewById(R.id.logo);
+                        iv.setImageBitmap(response);
                     }
                 };
-                task.execute("https://usth.edu.vn/uploads/tin-tuc/2019_12/logo-usth-pa3-01.png");
+                // a simple request to the required image
+                ImageRequest imageRequest = new ImageRequest(
+                        "https://usth.edu.vn/uploads/tin-tuc/2019_12/logo-usth-pa3-01.png",
+                        listener, 0, 0, ImageView.ScaleType.CENTER,
+                        Bitmap.Config.ARGB_8888,null);
+                // go!
+                queue.add(imageRequest);
                 break;
             case R.id.action_settings:
                 Intent pref = new Intent(this, PrefActivity.class);
