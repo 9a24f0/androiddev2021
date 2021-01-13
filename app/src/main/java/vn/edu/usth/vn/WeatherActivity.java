@@ -3,6 +3,7 @@ package vn.edu.usth.vn;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +31,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class WeatherActivity extends AppCompatActivity {
 
@@ -104,24 +108,39 @@ public class WeatherActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh:
-                @SuppressLint("StaticFieldLeak") AsyncTask<String, Integer, String> task = new AsyncTask<String, Integer, String>() {
+                @SuppressLint("StaticFieldLeak") AsyncTask<String, Integer, Bitmap> task = new AsyncTask<String, Integer, Bitmap>() {
                     @Override
                     protected void onPreExecute() {
                         // do some preparation here, if needed
                     }
 
                     @Override
-                    protected String doInBackground(String... params) {
+                    protected Bitmap doInBackground(String... params) {
+                        Bitmap bitmap = null;
                         // This is where the worker thread's code is executed
                         // params are passed from the execute() method call
                         try {
-                            // wait for 5 seconds to simulate a long network access
-                            Thread.sleep(2000);
+
+                            // initialize URL
+                            URL url = new URL(params[0]);
+                            // Make a request to server
+                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                            connection.setRequestMethod("GET");
+                            connection.setDoInput(true);
+                            // allow reading response code and response data connection.
+                            connection.connect();
+                            // Receive response
+                            int response = connection.getResponseCode();
+                            Log.i("USTHWeather", "The response is: " + response);
+                            InputStream is = connection.getInputStream();
+                            // Process image response
+                            bitmap = BitmapFactory.decodeStream(is);
+                            connection.disconnect();
                         }
-                        catch (InterruptedException e) {
+                        catch (IOException e) {
                             e.printStackTrace();
                         }
-                        return params[0];
+                        return bitmap;
                     }
                     @Override
                     protected void onProgressUpdate(Integer... values) {
@@ -131,13 +150,15 @@ public class WeatherActivity extends AppCompatActivity {
                         // to reflect how many percent of data has been retrieved
                     }
                     @Override
-                    protected void onPostExecute(String string) {
+                    protected void onPostExecute(Bitmap bitmap) {
                         // This method is called in the main thread. After #doInBackground returns
                         // the String data, we simply set it to an ImageView using ImageView.setImageBitmap()
-                        Toast.makeText(getApplicationContext(), string, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "refreshing", Toast.LENGTH_SHORT).show();
+                        ImageView logo = findViewById(R.id.logo);
+                        logo.setImageBitmap(bitmap);
                     }
                 };
-                task.execute("some sample json here");
+                task.execute("https://usth.edu.vn/uploads/tin-tuc/2019_12/logo-usth-pa3-01.png");
                 break;
             case R.id.action_settings:
                 Intent pref = new Intent(this, PrefActivity.class);
