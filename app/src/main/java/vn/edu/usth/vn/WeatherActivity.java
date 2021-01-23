@@ -15,19 +15,29 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.tabs.TabLayout;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,6 +45,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -71,6 +82,7 @@ public class WeatherActivity extends AppCompatActivity {
         super.onStart();
         Log.i("WeatherActivity", "Starting");
         mediaPlayer.start();
+        getCurrentWeatherData();
         copyFileToExternalStorage(R.raw.weatherforecast, "coypfile.mp3");
     }
 
@@ -112,23 +124,8 @@ public class WeatherActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh:
-                // once, should be performed once per app instance
-                RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-                // a listener (kinda similar to onPostExecute())
-                Response.Listener<Bitmap> listener = new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap response) {
-                        ImageView iv = (ImageView) findViewById(R.id.logo);
-                        iv.setImageBitmap(response);
-                    }
-                };
-                // a simple request to the required image
-                ImageRequest imageRequest = new ImageRequest(
-                        "https://usth.edu.vn/uploads/tin-tuc/2019_12/logo-usth-pa3-01.png",
-                        listener, 0, 0, ImageView.ScaleType.CENTER,
-                        Bitmap.Config.ARGB_8888,null);
-                // go!
-                queue.add(imageRequest);
+                getCurrentWeatherData();
+                updateBackground();
                 break;
             case R.id.action_settings:
                 Intent pref = new Intent(this, PrefActivity.class);
@@ -151,8 +148,7 @@ public class WeatherActivity extends AppCompatActivity {
                 while ((read = in.read(buff)) > 0) {
                     out.write(buff, 0, read);
                 }
-            }
-            finally {
+            } finally {
                 in.close();
                 out.close();
             }
@@ -166,5 +162,64 @@ public class WeatherActivity extends AppCompatActivity {
         }
     }
 
+    public void getCurrentWeatherData() {
+        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        String url = "https://api.openweathermap.org/data/2.5/weather?q=Hanoi&appid=a77770cf24301e4a55ee9e37acae116d&units=metric";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            final TextView descriptionView = findViewById(R.id.description);
+                            final TextView temperatureView = findViewById(R.id.temperature);
+                            final ImageView iconView = findViewById(R.id.icon);
 
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            // to get temperature
+                            JSONObject mainObject = jsonObject.getJSONObject("main");
+                            String temperature = mainObject.getString("temp");
+
+                            // to get description and image id
+                            JSONArray weatherArray = jsonObject.getJSONArray("weather");
+                            JSONObject weatherObject = weatherArray.getJSONObject(0);
+                            String description = weatherObject.getString("main");
+                            String id = weatherObject.getString("icon");
+
+                            // to update data
+                            descriptionView.setText(description);
+                            temperatureView.setText(temperature + " C");
+                            Picasso.get().load("https://openweathermap.org/img/wn/" + id + "@2x.png").into(iconView);
+                        } catch (JSONException error) {
+                            error.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        requestQueue.add(stringRequest);
+    }
+
+    public void updateBackground() {
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+
+        Response.Listener<Bitmap> listener = new Response.Listener<Bitmap>() {
+            public void onResponse(Bitmap response) {
+                ImageView iv = (ImageView) findViewById(R.id.logo);
+                iv.setImageBitmap(response);
+            }
+
+        };
+
+        ImageRequest imageRequest = new ImageRequest(
+            "https://usth.edu.vn/uploads/tin-tuc/2019_12/logo-usth-pa3-01.png",
+            listener, 0, 0, ImageView.ScaleType.CENTER,
+            Bitmap.Config.ARGB_8888,null);
+
+        queue.add(imageRequest);
+    }
 }
